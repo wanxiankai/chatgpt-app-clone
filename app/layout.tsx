@@ -3,9 +3,13 @@ import '@/styles/globals.css'
 import '@/styles/markdown.css'
 import AppContextProvider from '@/components/AppContext'
 import EventBusContextProvider from '@/components/EventBusContext'
+import {
+  ClerkProvider,
+} from '@clerk/nextjs'
+
 
 export const metadata: Metadata = {
-  title: 'ChatGPT Clone',
+  title: 'Free Chat AI',
 }
 
 export default function RootLayout({
@@ -14,14 +18,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body>
-        <AppContextProvider>
-          <EventBusContextProvider>
-            {children}
-          </EventBusContextProvider>
-        </AppContextProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body>
+          <AppContextProvider>
+            <EventBusContextProvider>
+              {children}
+            </EventBusContextProvider>
+          </AppContextProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }

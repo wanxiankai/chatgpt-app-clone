@@ -89,7 +89,7 @@ export default function ChatInput() {
 
     async function reSendMessage() {
         const messages = [...messageList];
-        if (messages.length !== 0 && messages[messages.length - 1].role === 'assistant') {
+        if (messages.length !== 0 && messages[messages.length - 1].role !== 'user') {
             const result = await deleteMessage(messages[messages.length - 1].id)
             if (!result) {
                 console.log('删除消息失败！')
@@ -150,6 +150,7 @@ export default function ChatInput() {
         const { code } = await response.json()
         if (code === 0) {
             publish('fetchChatList')
+            dispatch({type: ActionType.UPDATE, fiel:'selectedChat', value:{ id: chatId, title }})
         }
 
     }

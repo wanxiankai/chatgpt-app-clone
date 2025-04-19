@@ -2,7 +2,7 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import oneDark from 'react-syntax-highlighter/dist/esm/styles/prism/one-dark';
 import CodeCopyButton from './CodeCopyButton';
 import { MemoizedMarkdown } from './MemoizedMarkdown';
 
@@ -45,7 +45,7 @@ export default function AIChatMessage({ message, isStreaming = false }: AIChatMe
                                 overflowX: 'auto',   // 水平方向溢出滚动
                             }}>
                                 <SyntaxHighlighter
-                                    style={oneDark}
+                                    style={oneDark as any}
                                     language={match[1]}
                                     PreTag="div"
                                     className="rounded-md my-4 overflow-y-auto"
@@ -80,11 +80,15 @@ export default function AIChatMessage({ message, isStreaming = false }: AIChatMe
                             <table {...props} className="border-collapse border border-gray-300 dark:border-gray-700" />
                         </div>
                     ),
-                    th: ({ node, ...props }) => (
-                        <th {...props} className="border border-gray-300 dark:border-gray-700 px-4 py-2 bg-gray-100 dark:bg-gray-800" />
+                    th: ({ node, children }) => (
+                        <th className="border border-gray-300 dark:border-gray-700 px-4 py-2 bg-gray-100 dark:bg-gray-800" >
+                            {children}
+                        </th>
                     ),
-                    td: ({ node, ...props }) => (
-                        <td {...props} className="border border-gray-300 dark:border-gray-700 px-4 py-2" />
+                    td: ({ node, children }) => (
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2" >
+                            {children}
+                        </td>
                     ),
                 }}
             >

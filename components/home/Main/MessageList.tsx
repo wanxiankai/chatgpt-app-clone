@@ -2,7 +2,6 @@ import { useAppContext } from "@/components/AppContext"
 import AIChatMessage from "@/components/common/AIChatMessage";
 import { ActionType } from "@/reducers/AppReducer";
 import { useEffect, useRef } from "react";
-import { SiOpenai } from 'react-icons/si'
 
 export default function MessageList() {
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -10,11 +9,11 @@ export default function MessageList() {
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-      };
+    };
     useEffect(() => {
         scrollToBottom();
     }, [messageList]);
-    
+
     async function getData(chatId: string) {
         const response = await fetch(`/api/message/list?chatId=${chatId}`, {
             method: "GET"
@@ -36,29 +35,22 @@ export default function MessageList() {
     }, [selectedChat])
 
     return (
-        <div className="w-full pt-10 pb-48 dark:text-gray-300">
-                <ul>
-                    {messageList.map((message) => {
-                        const isUser = message.role === 'user'
-                        return (
-                            <li
-                                key={message.id}
-                                className={`${isUser
-                                    ? 'bg-white dark:bg-gray-800'
-                                    : 'bg-gray-50 dark:bg-gray-700'
-                                    }`}
-                            >
-                                <div className="w-full max-w-4xl mx-auto flex space-x-6 px-4 py-6 text-lg">
-                                    <div className="text-3xl leading-[1]">
-                                        {isUser ? "😊" : <SiOpenai />}
-                                    </div>
-                                    <div className="flex-1"><AIChatMessage message={message.content} isStreaming={Boolean(streamingId)} /></div>
+        <div className="w-full pt-10 pb-48 bg-white dark:bg-[#212121]">
+            <ul>
+                {messageList.map((message) => {
+                    const isUser = message.role === 'user'
+                    return (
+                        <li key={message.id}>
+                            <div className={`w-full max-w-2xl mx-auto flex items-center ${isUser ? 'justify-end':'justify-start'}  space-x-6 py-6 text-base`}>
+                                <div className={`w-fit ${isUser ? "bg-[#f4f4f4] p-2 rounded-2xl dark:bg-[#303030] dark:text-white": "bg-white dark:bg-[#212121] dark:text-white"} `}>
+                                    <AIChatMessage message={message.content} />
                                 </div>
-                            </li>
-                        )
-                    })}
-                    <div ref={messagesEndRef} />
-                </ul>
+                            </div>
+                        </li>
+                    )
+                })}
+                <div ref={messagesEndRef} />
+            </ul>
         </div>
     )
 }

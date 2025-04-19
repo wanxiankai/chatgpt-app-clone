@@ -1,11 +1,25 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
 model Chat {
   id         String    @id @default(uuid())
   title      String
+  message    Message[]
   updateTime DateTime  @updatedAt
-  Message    Message[]
+  createTime DateTime  @default(now())
+  @@map("chats")
 }
 
 model Message {
@@ -13,15 +27,8 @@ model Message {
   content    String
   role       String
   createTime DateTime @default(now())
-  chatId     String
-  chat       Chat     @relation(fields: [chatId], references: [id])
-}
-
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "sqlite"
-  url      = "file:./chatgpt-app-clone.sqlite"
+  updateTime DateTime @updatedAt
+  chatId     String   @map("chat_id") 
+  chat       Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  @@map("messages")
 }
